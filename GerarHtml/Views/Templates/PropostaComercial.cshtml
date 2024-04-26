@@ -1,0 +1,160 @@
+﻿@using System.Globalization;
+@{
+    Layout = "_Layout";
+}
+    <div class="page-wrapper">
+        <div class="d-flex justify-content-between">
+            @{
+                if (!String.IsNullOrEmpty(Model.LogoUrl))
+                {
+                    <img src="@Model.LogoUrl" style="width: 200px; height: auto" />
+                }
+                else
+                {
+                    <img src="https://edeltecsolar.com.br/img/logo.svg" style="width: 200px; height: auto" />
+                }
+            }
+
+        </div>
+
+        <div class="my-4">
+            <h1 class="page-title mb-0">PROPOSTA COMERCIAL</h1>
+            @{
+                if (Model.NumeroDoDocumento is not null && Model.NumeroDoDocumento > 0)
+                {
+                    <h6 class="text-muted mb-0">Nº Documento: @Model.NumeroDoDocumento</h6>
+                }
+            }
+        </div>
+
+        <!-- DADOS DO VENDEDOR -->
+        @{
+            if (Model.Vendedor is not null && Model.Integrador.Codigo != 19165)
+            {
+                <div class="mb-4">
+                    <h6 class="block-title">Dados do Vendedor</h6>
+                    <p>@Model.Vendedor.Nome</p>
+                </div>
+            }
+        }
+
+        <!-- DADOS DO COMPRADOR -->
+        @{
+            if (Model.Comprador is not null)
+            {
+                <div class="mb-4">
+                    <h6 class="block-title">Dados do Comprador</h6>
+                    <b>@Model.Comprador.Nome</b>
+                    <br />Localizado em @Model.Comprador.EnderecoPorExtenso <br /> @Model.Comprador.Documento
+                </div>
+            }
+        }
+
+        <div class="mb-3">
+            <h6 class="block-title">Dados do Integrador</h6>
+            <b>@Model.Integrador.Nome</b>
+            <br />localizado em @Model.Integrador.EnderecoPorExtenso <br /> @Model.Integrador.Documento
+            <br />e-mail: @Model.Integrador.Email
+        </div>
+
+        <h3><strong>Itens da Proposta</strong></h3>
+
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>QUANTIDADE</th>
+                    <th>PRODUTO</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (GerarHtml.Models.Produto item in Model.Itens)
+                {
+                    <tr>
+                        <td class="text-end">@item.Quantidade</td>
+                        <td>@item.Descricao</td>
+                    </tr>
+                    @foreach (GerarHtml.Models.Produto componente in @item.Componentes)
+                    {
+                        <tr>
+                            <td class="text-end">@componente.Quantidade</td>
+                            <td>@componente.Descricao</td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+            <tfoot>
+                @if (Model.DestacarValorDoServico)
+                {
+                    <tr>
+                        <td colspan="2" style="text-align: right">
+                            <b>VALOR DO SERVIÇO:</b>@Model.ValorDoServico
+                        </td>
+                    </tr>
+                }
+                @if (Model.ItemDesconto is not null)
+                {
+                    <tr>
+                    <td colspan="2" style="text-align: right"><b>DESCONTO:</b> R$ @Model.ValorDoDesconto.ToString("F2", CultureInfo.CreateSpecificCulture("pt-BR"))</td>
+                    </tr>
+                }
+                <tr>
+                <td colspan="2" style="text-align: right"><b>VALOR TOTAL:</b> R$ @Model.ValorTotal.ToString("F2", CultureInfo.CreateSpecificCulture("pt-BR"))</td>
+                </tr>
+            </tfoot>
+        </table>
+        @{
+            if (Model.Portifolio is not null)
+            {
+                <div class="section my-5">
+                    <h3><strong>Portfólio</strong></h3>
+                    <p>@Model.Portifolio.Apresentacao</p>
+
+                    <div class="grid">
+                        @foreach (GerarHtml.Models.PortifolioItem item in Model.Portifolio.Itens)
+                        {
+                            <div class="grid-item">
+                                <h6>@item.Titulo</h6>
+                                <img src="@item.Url" style="width: 200px; height: 170px; object-fit: cover" />
+                                <small><i>@item.Subtitulo</i></small>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        }
+
+        <p class="section my-5" style="page-break-before: always">
+            <strong>GARANTIA:</strong> @Model.Labels.Garantia
+        </p>
+
+        <div class="section">
+            <table style="width: 100%">
+                <tbody>
+                    <tr>
+                        <td style="text-align: center">
+                            <hr style="width: 100%; margin-bottom: 0" />
+                            <span><b> @Model.Labels.TituloDaAssinatura</b></span><br />
+                            <small> @Model.Labels.SubtituloDaAssinatura</small>
+                        </td>
+                        <td style="text-align: center">
+                            <span> @Model.Labels.Cidade , @DateTime.Now.ToShortDateString()</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="m-4 text-center">
+                <b><i> @Model.Labels.Rodape</i></b>
+            </div>
+
+            <div class="text-center">
+                <p class="mb-0">
+                    <strong> @Model.Labels.DadosDaEmpresa</strong>
+                </p>
+                <p class="mb-0"> @Model.Labels.EnderecoDaEmpresa</p>
+                <p class="mb-0"> @Model.Labels.Site</p>
+            </div>
+        </div>
+    </div>

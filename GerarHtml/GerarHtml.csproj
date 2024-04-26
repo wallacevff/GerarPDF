@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<PreserveCompilationContext>true</PreserveCompilationContext>
+		<UserSecretsId>50b246ad-190a-4609-a847-d7f4cbeb2730</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<ServerGarbageCollection>true</ServerGarbageCollection>
+
+
+	</PropertyGroup>
+
+
+	<ItemGroup>
+		<EmbeddedResource Include="Views\Templates\*.cshtml" />
+	</ItemGroup>
+
+
+
+
+	<ItemGroup>
+		<EmbeddedResource Include="libwkhtmltox.dll">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="libwkhtmltox.dylib">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="libwkhtmltox.so">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="DinkToPdf" Version="1.0.8" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+		<PackageReference Include="PuppeteerSharp" Version="9.0.2" />
+		<PackageReference Include="RazorLight" Version="2.3.1" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+		<PackageReference Include="WkHtmlToPdf" Version="1.0.2" />
+	</ItemGroup>
+
+</Project>

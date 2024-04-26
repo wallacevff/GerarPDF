@@ -1,0 +1,29 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - AWS_NAMESPACE=903987525052.dkr.ecr.us-east-1.amazonaws.com
+      - REPOSITORY_URI=$AWS_NAMESPACE/edeltec-reports-api
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $AWS_NAMESPACE
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t edeltec-reports-api -f GerarHtml/Dockerfile .
+      - docker tag edeltec-reports-api:latest $REPOSITORY_URI:$IMAGE_TAG
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo Writing image definitions file...
+      - printf '[{"name":"edeltec-reports-api", "imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - cat imagedefinitions.json
+
+artifacts:
+  files: imagedefinitions.json
